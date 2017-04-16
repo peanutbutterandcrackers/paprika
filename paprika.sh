@@ -2,7 +2,7 @@
 
 resize () {
 	for i in *; do
-		if [[ $(file --mime-type $i) =~ image ]]; then
+		if [[ ( -f $i ) && $(file --mime-type $i) =~ image ]]; then
 			if [[ !($i =~ ^DCmini_*) ]]; then
 				convert -resize 1300 $i $i
 			fi
@@ -12,7 +12,7 @@ resize () {
 
 encrypt () {
 	for i in *; do
-		if [[ $(file --mime-type $i) =~ image ]]; then
+		if [[ ( -f $i ) && $(file --mime-type $i) =~ image ]]; then
 			if [[ ! ($i =~ ^DCmini_*) ]]; then
 				convert -encipher $password_file $i DCmini_${i%%.*}.png
 				rm $i
@@ -25,12 +25,12 @@ encrypt () {
 
 decrypt () {
 	for i in *; do
-		if [[ $(file --mime-type $i) =~ image ]]; then
+		if [[ (-f $i ) && $(file --mime-type $i) =~ image ]]; then
 			if [[ $i =~ ^DCmini_* ]]; then
 				j=${i##DCmini_}
 				j=${j%%.*}.jpg
-				convert -decipher $password_file $i $j 
-				rm $i
+			#	mkdir paprika_decrypted_images before calling this function
+				convert -decipher $password_file $i paprika_decrypted_images/$j
 			fi
 		else
 			continue
@@ -65,17 +65,20 @@ while true; do
 	printf "Please select the mode. (\033[2;41mE\033[0mncipher/\033[2;41mD\033[0mecipher) > "
 	read mode
 	case ${mode,,} in
-		encipher|e) printf "\nIf your photos are of large size, it might be a good idea to resize them.\n"
+		encipher|e) 		printf "\nIf your photos are of large size, it might be a good idea to resize them.\n"
 					printf "Would you like to resize them? (\033[2;41mY\033[0m/\033[2;41mN\033[0m) > "
 					read
+					[[ ${REPLY,,} == q ]] && exit
 					[[ ${REPLY,,} == y ]] && resize
 					encrypt
 					break
 					;;
-		decipher|d) decrypt
+		decipher|d) 		ls paprika_decrypted_images &> /dev/null
+					[[ $? != 0 ]] && mkdir paprika_decrypted_images
+					decrypt
 					break
 					;;
-		quit|q)		exit
+		quit|q)			exit
 					;;
 		*)			clear
 					continue
