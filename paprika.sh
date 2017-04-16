@@ -2,7 +2,7 @@
 
 resize () {
 	for i in *; do
-		if [[ ( -f $i ) && $(file --mime-type $i) =~ image ]]; then
+		if [[ ( -f $i ) && $(file --brief --mime-type $i) =~ image ]]; then
 			if [[ !($i =~ ^DCmini_*) ]]; then
 				convert -resize 1300 $i $i
 			fi
@@ -12,7 +12,7 @@ resize () {
 
 encrypt () {
 	for i in *; do
-		if [[ ( -f $i ) && $(file --mime-type $i) =~ image ]]; then
+		if [[ ( -f $i ) && $(file --brief --mime-type $i) =~ image ]]; then
 			if [[ ! ($i =~ ^DCmini_*) ]]; then
 				convert -encipher $password_file $i DCmini_${i%%.*}.png
 				rm $i
@@ -25,7 +25,7 @@ encrypt () {
 
 decrypt () {
 	for i in *; do
-		if [[ (-f $i ) && $(file --mime-type $i) =~ image ]]; then
+		if [[ (-f $i ) && $(file --brief --mime-type $i) =~ image ]]; then
 			if [[ $i =~ ^DCmini_* ]]; then
 				j=${i##DCmini_}
 				j=${j%%.*}.jpg
@@ -87,6 +87,6 @@ while true; do
 done
 
 printf """
-Done! 
+Done!
 Please keep the pass-file safe.
 """
