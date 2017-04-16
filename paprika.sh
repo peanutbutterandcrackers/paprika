@@ -65,7 +65,7 @@ while true; do
 	printf "Please select the mode. (\033[2;41mE\033[0mncipher/\033[2;41mD\033[0mecipher) > "
 	read mode
 	case ${mode,,} in
-		encipher|e) printf "If your photos are of large size, it might be a good idea to resize them.\n"
+		encipher|e) printf "\nIf your photos are of large size, it might be a good idea to resize them.\n"
 					printf "Would you like to resize them? (\033[2;41mY\033[0m/\033[2;41mN\033[0m) > "
 					read
 					[[ ${REPLY,,} == y ]] && resize
