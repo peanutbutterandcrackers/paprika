@@ -43,7 +43,8 @@ printf """
 \033[1;31mPaprika Initializing...\033[0m
 
 This script will encipher or decipher all the pictures in your current director-
-y, using a 'pass-file' that you provide.
+y, using a 'pass-file' that you provide. The original files will then be deleted
+- you'll be left only with either deciphered or enciphered images.
 
 """
 
@@ -55,10 +56,13 @@ read
 [[ !(${REPLY,,} =~ [qc]) ]] && echo -e "Invalid Input. Exiting." && exit
 [[ ${REPLY,,} == q ]] && exit
 
-printf "\nContinuing...\n"
+printf "\nContinuing...\n\n"
 read -p "Please enter the name of the 'pass-file': " password_file
+ls $password_file &> /dev/null
+[[ $? != 0 ]] && echo "The pass-file you entered does not exist. Exiting." && exit
+
 while true; do
-	printf "Please select the mode. (\033[2;41mEncipher\033[0m/\033[2;41mDecipher\033[0m) > "
+	printf "Please select the mode. (\033[2;41mE\033[0mncipher/\033[2;41mD\033[0mecipher) > "
 	read mode
 	case ${mode,,} in
 		encipher|e) printf "If your photos are of large size, it might be a good idea to resize them.\n"
@@ -78,3 +82,8 @@ while true; do
 					;;
 	esac
 done
+
+printf """
+Done! 
+Please keep the pass-file safe.
+"""
