@@ -3,7 +3,7 @@
 resize () {
 	for i in *; do
 		if [[ $(file --mime-type $i) =~ image ]]; then
-			if [[ !($i =~ ^Dream_*) ]]; then
+			if [[ !($i =~ ^DCmini_*) ]]; then
 				convert -resize 1300 $i $i
 			fi
 		fi
@@ -13,8 +13,8 @@ resize () {
 encrypt () {
 	for i in *; do
 		if [[ $(file --mime-type $i) =~ image ]]; then
-			if [[ ! ($i =~ ^Dream_*) ]]; then
-				convert -encipher $password_file $i Dream_${i%%.*}.png
+			if [[ ! ($i =~ ^DCmini_*) ]]; then
+				convert -encipher $password_file $i DCmini_${i%%.*}.png
 				rm $i
 			fi
 		else
@@ -26,8 +26,8 @@ encrypt () {
 decrypt () {
 	for i in *; do
 		if [[ $(file --mime-type $i) =~ image ]]; then
-			if [[ $i =~ ^Dream_* ]]; then
-				j=${i##Dream_}
+			if [[ $i =~ ^DCmini_* ]]; then
+				j=${i##DCmini_}
 				j=${j%%.*}.jpg
 				convert -decipher $password_file $i $j 
 				rm $i
