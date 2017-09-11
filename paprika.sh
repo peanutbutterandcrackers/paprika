@@ -1,10 +1,10 @@
 #!/bin/bash
 
-resize () {
+compress () {
 	for i in *; do
 		if [[ ( -f $i ) && $(file --brief --mime-type $i) =~ image ]]; then
 			if [[ !($i =~ ^DCmini_*) ]]; then
-				convert -resize 1300 $i $i
+				convert -quality 73 $i $i
 			fi
 		fi
 	done
@@ -65,11 +65,11 @@ while true; do
 	printf "Please select the mode. (\033[2;41mE\033[0mncipher/\033[2;41mD\033[0mecipher) > "
 	read mode
 	case ${mode,,} in
-		encipher|e) 		printf "\nIf your photos are of large size, it might be a good idea to resize them.\n"
-					printf "Would you like to resize them? (\033[2;41mY\033[0m/\033[2;41mN\033[0m) > "
+		encipher|e) 		printf "\nIf your photos are of large size, it might be a good idea to compress them.\n"
+					printf "Would you like to compress them? (\033[2;41mY\033[0m/\033[2;41mN\033[0m) > "
 					read
 					[[ ${REPLY,,} == q ]] && exit
-					[[ ${REPLY,,} == y ]] && resize
+					[[ ${REPLY,,} == y ]] && compress
 					encrypt
 					break
 					;;
